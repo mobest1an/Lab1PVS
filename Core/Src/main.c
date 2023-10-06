@@ -54,6 +54,30 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+int button_checker(int time) {
+	for (int i = 0; i < time/50; i++) {
+		int button_status = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_15);
+		HAL_Delay(50);
+		int new_button_status = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_15);
+		if (button_status == 0 && new_button_status == 0) {
+			return 1;
+		}
+	}
+	return 0;
+}
+
+int press_checker(int time) {
+	for (int i = 0; i < time/50; i++) {
+		int button_status = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_15);
+		HAL_Delay(50);
+		int new_button_status = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_15);
+		if (button_status == 1 && new_button_status == 1) {
+			return 1;
+		}
+	}
+	return 0;
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -90,37 +114,68 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  int mode = 1;
+  int mode = 0;
   int speed = 100;
+  int pressed = 0;
+  int statuses[4] = {0, 0, 0, 0};
   while (1)
   {
 	  int button_state = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_15);
 	  while (button_state) {
-		  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
-		  HAL_Delay(speed);
-		  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_15);
-		  HAL_Delay(speed);
-		  int new_button_state = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_15);
-		  if (!new_button_state) {
-			  HAL_Delay(500);
-			  if (!HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_15)) {
-				  button_state = 0;
-			  }
+		  pressed = 0;
+		  if (statuses[mode] != 1 && statuses[mode] != 3) {
+		  	  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
+		  	  statuses[mode]++;
+		  	  if (statuses[mode] > 3) {
+			  	  statuses[mode] = 0;
+		  	  }
+		  	  if (button_checker(speed)) {
+			  	  break;
+		  	  }
 		  }
+		  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_15);
+		  statuses[mode]++;
+		  if (statuses[mode] > 3) {
+			  statuses[mode] = 0;
+		  }
+		  if (button_checker(speed)) {
+			  break;
+		  }
+		  button_state = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_15);
+	  }
+	  if (pressed) {
+		  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
+		  if (press_checker(speed)) {
+			  continue;
+		  }
+		  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_15);
+		  if (press_checker(speed)) {
+			  continue;
+		  }
+		  continue;
 	  }
 	  mode++;
-	  if (mode > 4) {
-		  mode = 1;
+	  if (mode > 3) {
+		  mode = 0;
 	  }
-	  if (mode == 1) {
+	  if (mode == 0) {
 		  speed = 100;
-	  } else if (mode == 2) {
+	  } else if (mode == 1) {
 		  speed = 300;
-	  } else if (mode == 3) {
+	  } else if (mode == 2) {
 		  speed = 600;
-	  } else if (mode == 4) {
+	  } else if (mode == 3) {
 		  speed = 1000;
 	  }
+	  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_RESET);
+	  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET);
+	  if (statuses[mode] == 1 || statuses[mode] == 2) {
+		  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_SET);
+	  }
+	  if (statuses[mode] == 2 || statuses[mode] == 3) {
+		  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
+	  }
+	  pressed = 1;
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
