@@ -55,9 +55,9 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN 0 */
 
 int button_checker(int time) {
-	for (int i = 0; i < time/50; i++) {
+	for (int i = 0; i < time/10; i++) {
 		int button_status = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_15);
-		HAL_Delay(50);
+		HAL_Delay(10);
 		int new_button_status = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_15);
 		if (button_status == 0 && new_button_status == 0) {
 			return 1;
@@ -67,9 +67,9 @@ int button_checker(int time) {
 }
 
 int press_checker(int time) {
-	for (int i = 0; i < time/50; i++) {
+	for (int i = 0; i < time/10; i++) {
 		int button_status = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_15);
-		HAL_Delay(50);
+		HAL_Delay(10);
 		int new_button_status = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_15);
 		if (button_status == 1 && new_button_status == 1) {
 			return 1;

@@ -524,7 +524,7 @@ int button_checker(int time) {
  80005ee:	b086      	sub	sp, #24
  80005f0:	af00      	add	r7, sp, #0
  80005f2:	6078      	str	r0, [r7, #4]
-	for (int i = 0; i < time/50; i++) {
+	for (int i = 0; i < time/10; i++) {
  80005f4:	2300      	movs	r3, #0
  80005f6:	617b      	str	r3, [r7, #20]
  80005f8:	e01b      	b.n	8000632 <button_checker+0x46>
@@ -534,8 +534,8 @@ int button_checker(int time) {
  8000600:	f000 fd98 	bl	8001134 <HAL_GPIO_ReadPin>
  8000604:	4603      	mov	r3, r0
  8000606:	613b      	str	r3, [r7, #16]
-		HAL_Delay(50);
- 8000608:	2032      	movs	r0, #50	; 0x32
+		HAL_Delay(10);
+ 8000608:	200a      	movs	r0, #10
  800060a:	f000 fadd 	bl	8000bc8 <HAL_Delay>
 		int new_button_status = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_15);
  800060e:	f44f 4100 	mov.w	r1, #32768	; 0x8000
@@ -553,14 +553,14 @@ int button_checker(int time) {
 			return 1;
  8000628:	2301      	movs	r3, #1
  800062a:	e00d      	b.n	8000648 <button_checker+0x5c>
-	for (int i = 0; i < time/50; i++) {
+	for (int i = 0; i < time/10; i++) {
  800062c:	697b      	ldr	r3, [r7, #20]
  800062e:	3301      	adds	r3, #1
  8000630:	617b      	str	r3, [r7, #20]
  8000632:	687b      	ldr	r3, [r7, #4]
  8000634:	4a07      	ldr	r2, [pc, #28]	; (8000654 <button_checker+0x68>)
  8000636:	fb82 1203 	smull	r1, r2, r2, r3
- 800063a:	1112      	asrs	r2, r2, #4
+ 800063a:	1092      	asrs	r2, r2, #2
  800063c:	17db      	asrs	r3, r3, #31
  800063e:	1ad3      	subs	r3, r2, r3
  8000640:	697a      	ldr	r2, [r7, #20]
@@ -576,7 +576,7 @@ int button_checker(int time) {
  800064c:	46bd      	mov	sp, r7
  800064e:	bd80      	pop	{r7, pc}
  8000650:	40020800 	.word	0x40020800
- 8000654:	51eb851f 	.word	0x51eb851f
+ 8000654:	66666667 	.word	0x66666667
 
 08000658 <press_checker>:
 
@@ -585,7 +585,7 @@ int press_checker(int time) {
  800065a:	b086      	sub	sp, #24
  800065c:	af00      	add	r7, sp, #0
  800065e:	6078      	str	r0, [r7, #4]
-	for (int i = 0; i < time/50; i++) {
+	for (int i = 0; i < time/10; i++) {
  8000660:	2300      	movs	r3, #0
  8000662:	617b      	str	r3, [r7, #20]
  8000664:	e01b      	b.n	800069e <press_checker+0x46>
@@ -595,8 +595,8 @@ int press_checker(int time) {
  800066c:	f000 fd62 	bl	8001134 <HAL_GPIO_ReadPin>
  8000670:	4603      	mov	r3, r0
  8000672:	613b      	str	r3, [r7, #16]
-		HAL_Delay(50);
- 8000674:	2032      	movs	r0, #50	; 0x32
+		HAL_Delay(10);
+ 8000674:	200a      	movs	r0, #10
  8000676:	f000 faa7 	bl	8000bc8 <HAL_Delay>
 		int new_button_status = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_15);
  800067a:	f44f 4100 	mov.w	r1, #32768	; 0x8000
@@ -614,14 +614,14 @@ int press_checker(int time) {
 			return 1;
  8000694:	2301      	movs	r3, #1
  8000696:	e00d      	b.n	80006b4 <press_checker+0x5c>
-	for (int i = 0; i < time/50; i++) {
+	for (int i = 0; i < time/10; i++) {
  8000698:	697b      	ldr	r3, [r7, #20]
  800069a:	3301      	adds	r3, #1
  800069c:	617b      	str	r3, [r7, #20]
  800069e:	687b      	ldr	r3, [r7, #4]
  80006a0:	4a07      	ldr	r2, [pc, #28]	; (80006c0 <press_checker+0x68>)
  80006a2:	fb82 1203 	smull	r1, r2, r2, r3
- 80006a6:	1112      	asrs	r2, r2, #4
+ 80006a6:	1092      	asrs	r2, r2, #2
  80006a8:	17db      	asrs	r3, r3, #31
  80006aa:	1ad3      	subs	r3, r2, r3
  80006ac:	697a      	ldr	r2, [r7, #20]
@@ -637,7 +637,7 @@ int press_checker(int time) {
  80006b8:	46bd      	mov	sp, r7
  80006ba:	bd80      	pop	{r7, pc}
  80006bc:	40020800 	.word	0x40020800
- 80006c0:	51eb851f 	.word	0x51eb851f
+ 80006c0:	66666667 	.word	0x66666667
 
 080006c4 <main>:
 /**
